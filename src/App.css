@@ -1,44 +1,46 @@
 .app {
-  padding: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-height: 100vh;
+    padding-bottom: 4rem; /* Extra padding for animations */
 }
 
 .app h1 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+    text-align: center;
+    color: #0A66C2;
+    margin-bottom: 0.5rem;
 }
 
 .app p {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
+    text-align: center;
+    color: #242424;
+    margin-bottom: 0; /* Remove bottom margin since we're using gap */
 }
 
 /* Step content styles */
 input {
-  display: block;
-  width: 100%;
-  max-width: 300px;
-  margin: 0.5rem auto;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
 input:focus {
-  outline: none;
-  border-color: #5227FF;
-  box-shadow: 0 0 0 2px rgba(82, 39, 255, 0.1);
+    outline: none;
+    border-color: #0a66c2;
+    box-shadow: 0 0 0 2px rgba(82, 39, 255, 0.1);
 }
 
 h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 1rem;
+    text-align: center;
+    color: #656565;
+    margin-bottom: 1rem;
 }
