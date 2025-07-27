@@ -1,0 +1,63 @@
+.step-indicator-container {
+    display: flex;
+    width: calc(100% - 4rem); /* Account for the 2rem padding on each side */
+    align-items: center;
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+.step-default {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.step-indicator {
+    position: relative;
+    cursor: pointer;
+    outline: none;
+}
+
+.step-indicator-inner {
+    display: flex;
+    height: 2rem;
+    width: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    font-weight: 600;
+}
+
+.active-dot {
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 9999px;
+    background-color: #FFFFFF;
+}
+
+.step-number {
+    font-size: 0.875rem;
+}
+
+.step-connector {
+    position: relative;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    height: 0.125rem;
+    flex: 1;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    background-color: #52525b;
+}
+
+.step-connector-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+
+.check-icon {
+    height: 1rem;
+    width: 1rem;
+    color: #FFFFFF;
+}

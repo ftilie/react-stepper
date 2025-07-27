@@ -1,9 +1,9 @@
-import { ButtonHTMLAttributes, Children, HTMLAttributes, ReactNode, useState } from "react";
-import "./Stepper.css";
-import React from "react";
+import React, { useState, Children, HTMLAttributes, ReactNode, ButtonHTMLAttributes } from "react";
+import { StepContentWrapper } from "./StepWrapper/StepWrapper";
+import { StepConnector, StepIndicator } from "./Step/Step";
+import { STEPPER_DIRECTION_NEXT, STEPPER_DIRECTION_PREVIOUS } from "./Constants";
 
-const STEPPER_DIRECTION_NEXT = "next";
-const STEPPER_DIRECTION_PREVIOUS = "previous";
+import "./Stepper.css";
 
 interface ButtonProps {
     onChange?: ButtonHTMLAttributes<HTMLButtonElement>;
@@ -28,97 +28,97 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
     disabledStepIndicator?: boolean;
 }
 
-const Stepper = ({
-    step = 1,
+export default function Stepper({
     children,
+    step = 1,
     onStepChange = () => {},
     onCompletion = () => {},
-    nextButton = { text: "Next", disabled: false },
-    previousButton = { text: "Previous", disabled: false },
+    nextButton = { text: "Next", onChange: {}, disabled: false },
+    previousButton = { text: "Back", onChange: {}, disabled: false },
     stepIndicator,
     disabledStepIndicator = false,
-    ...props
-}: StepperProps) => {
+}: StepperProps) {
     const [direction, setDirection] = useState<typeof STEPPER_DIRECTION_PREVIOUS | typeof STEPPER_DIRECTION_NEXT>(STEPPER_DIRECTION_NEXT);
     const [currentStep, setCurrentStep] = useState<number>(step);
-    const totalSteps = Children.count(children);
-    const isCompleted = currentStep === totalSteps;
+    const stepCount = Children.count(children);
 
-    const handleNext = () => {
-        if (currentStep < totalSteps) {
-            setCurrentStep(currentStep + 1);
-            onStepChange(currentStep + 1);
-            setDirection(STEPPER_DIRECTION_NEXT);
-        } else {
-            onCompletion();
-        }
+    const updateStep = (update: number) => {
+        setCurrentStep(update);
+        update > stepCount ? onCompletion() : onStepChange(update);
     };
 
     const handlePrevious = () => {
         if (currentStep > 1) {
-            setCurrentStep(currentStep - 1);
-            onStepChange(currentStep - 1);
             setDirection(STEPPER_DIRECTION_PREVIOUS);
+            updateStep(currentStep - 1);
         }
     };
 
+    const handleNext = () => {
+        if (!(currentStep === stepCount)) {
+            setDirection(STEPPER_DIRECTION_NEXT);
+            updateStep(currentStep + 1);
+        }
+    };
+
+    const handleComplete = () => {
+        setDirection(STEPPER_DIRECTION_NEXT);
+        updateStep(stepCount + 1);
+    };
+
     return (
-        <div className="outer-container">
-            <div className={`step-circle-containe`} style={{ border: "1px solid #222" }}>
-                <div className={`step-indicator-row`}>
+        <div className="stepper-container">
+            <div className={"transition-container"}>
+                <div className={"step-indicator-container"}>
                     {Children.toArray(children).map((_, index) => {
-                        const stepNumber = index + 1;
-                        const isLastStep = index === totalSteps - 1;
+                        const step = index + 1;
                         return (
-                            <React.Fragment key={stepNumber}>
+                            <React.Fragment key={step}>
                                 {stepIndicator ? (
                                     stepIndicator({
-                                        step: stepNumber,
+                                        step,
                                         currentStep,
                                         onClick: (selectedStep) => {
                                             setDirection(selectedStep > currentStep ? STEPPER_DIRECTION_NEXT : STEPPER_DIRECTION_PREVIOUS);
-                                            setCurrentStep(selectedStep);
+                                            updateStep(selectedStep);
                                         },
                                     })
                                 ) : (
-                                    // <StepIndicator
-                                    //     step={stepNumber}
-                                    //     disableStepIndicators={disableStepIndicators}
-                                    //     currentStep={currentStep}
-                                    //     onClickStep={(clicked) => {
-                                    //         setDirection(clicked > currentStep ? 1 : -1);
-                                    //         updateStep(clicked);
-                                    //     }}
-                                    // />
-                                    <></>
+                                    <StepIndicator
+                                        step={step}
+                                        disableStepIndicators={disabledStepIndicator}
+                                        currentStep={currentStep}
+                                        onClickStep={(selectedStep) => {
+                                            setDirection(selectedStep > currentStep ? STEPPER_DIRECTION_NEXT : STEPPER_DIRECTION_PREVIOUS);
+                                            updateStep(selectedStep);
+                                        }}
+                                    />
                                 )}
-                                {/* {!isLastStep && <StepConnector isComplete={currentStep > stepNumber} />} */}
+                                {index < stepCount - 1 && <StepConnector isComplete={currentStep > step} />}
                             </React.Fragment>
                         );
                     })}
                 </div>
 
-                {/* <StepContentWrapper isCompleted={isCompleted} currentStep={currentStep} direction={direction} className={`step-content-default ${contentClassName}`}>
-                    {stepsArray[currentStep - 1]}
-                </StepContentWrapper> */}
+                <StepContentWrapper direction={direction} currentStep={currentStep} stepCount={stepCount}>
+                    {Children.toArray(children)[currentStep - 1]}
+                </StepContentWrapper>
 
-                {!isCompleted && (
+                {!(currentStep > stepCount) && (
                     <div className={`footer-container`}>
                         <div className={`footer-nav ${currentStep !== 1 ? "spread" : "end"}`}>
                             {currentStep !== 1 && (
-                                <button onClick={handlePrevious} className={`back-button ${currentStep === 1 ? "inactive" : ""}`} {...previousButton.onChange}>
-                                    {previousButton.text}
+                                <button onClick={handlePrevious} className={`previous-button-container ${currentStep === 1 ? "inactive" : ""}`} disabled={previousButton.disabled} {...previousButton.onChange}>
+                                    {previousButton.text || "Back"}
                                 </button>
                             )}
-                            {/* <button onClick={isLastStep ? handleComplete : handleNext} className="next-button" {...nextButtonProps}>
-                                {isLastStep ? "Complete" : nextButtonText}
-                            </button> */}
+                            <button onClick={currentStep === stepCount ? handleComplete : handleNext} className="next_button-container" disabled={nextButton.disabled} {...nextButton.onChange}>
+                                {currentStep === stepCount ? "Complete" : nextButton.text || "Next"}
+                            </button>
                         </div>
                     </div>
                 )}
             </div>
         </div>
     );
-};
-
-export default Stepper;
+}
