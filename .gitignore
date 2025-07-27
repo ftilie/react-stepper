@@ -11,7 +11,6 @@ node_modules
 dist
 dist-ssr
 *.local
-components/Stepper2
 
 # Editor directories and files
 .vscode/*
