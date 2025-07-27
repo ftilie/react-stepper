@@ -9,9 +9,6 @@ A highly customizable, animated React stepper component built with TypeScript an
 - 🎨 **Highly Customizable** - Custom step indicators, buttons, and styling
 - ⚡ **Smooth Animations** - Powered by Framer Motion for fluid transitions
 - 📱 **Responsive Design** - Works seamlessly across all device sizes
-- 🔧 **TypeScript Support** - Full type safety and IntelliSense
-- 🎯 **Easy to Use** - Simple API with sensible defaults
-- 🚀 **Performance Optimized** - Efficient rendering and animations
 
 ## Installation
 
@@ -142,8 +139,7 @@ The `Step` component is a simple wrapper for step content:
   stepIndicator={({ step, currentStep, onClick }) => (
     <div 
       className={`custom-indicator ${step === currentStep ? 'active' : ''}`}
-      onClick={() => onClick(step)}
-    >
+      onClick={() => onClick(step)}>
       {step}
     </div>
   )}
@@ -216,14 +212,6 @@ function AdvancedStepper() {
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## License
 
